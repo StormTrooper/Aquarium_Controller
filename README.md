@@ -1,7 +1,7 @@
 Arduino/NodeMCU based Aquarium Controller
 =========================================
 
-Temperature and pH values are read and transmitted to Domoticz every 5 mins.
+Temperature and pH values are read and transmitted to Domoticz (http://domoticz.com) every 5 mins.
 The controller also sets the RGB LED lighting depending on the time of day/night.
 T5 lights and CO2 controlled via time and switched on/off via relays.
 
