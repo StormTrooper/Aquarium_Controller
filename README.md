@@ -37,6 +37,8 @@ Setup
 =====
 
 Create wifi.h file which contains:
+
 const char* ssid = "xxxxxxx";
+
 const char* password = "xxxxxxxxxx";
 
