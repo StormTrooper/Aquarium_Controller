@@ -1,4 +1,5 @@
-Arduino/NodeMCU based Aquarium Controller.
+Arduino/NodeMCU based Aquarium Controller
+=========================================
 
 Temperature and pH values are read and transmitted to Domoticz every 5 mins.
 The controller also sets the RGB LED lighting depending on the time of day/night.
@@ -9,7 +10,8 @@ Greg McCarthy
 Hardware:
 NodeMCU
 
-Libaries Used:
+Libaries Used
+=============
 
 DS1307 - RTC
 https://github.com/Makuna/Rtc
@@ -32,6 +34,8 @@ http://www.infineon.com/dgdl/irf540n.pdf?fileId=5546d462533600a4015355e396cb199f
 http://www.ebay.co.uk/itm/322248491740?_trksid=p2057872.m2749.l2649&var=511148771996&ssPageName=STRK%3AMEBIDX%3AIT
 
 Setup
+=====
+
 Create wifi.h file which contains:
 const char* ssid = "xxxxxxx";
 const char* password = "xxxxxxxxxx";
