@@ -31,4 +31,8 @@ http://www.infineon.com/dgdl/irf540n.pdf?fileId=5546d462533600a4015355e396cb199f
 5050 RGB LED String
 http://www.ebay.co.uk/itm/322248491740?_trksid=p2057872.m2749.l2649&var=511148771996&ssPageName=STRK%3AMEBIDX%3AIT
 
+Setup
+Create wifi.h file which contains:
+const char* ssid = "xxxxxxx";
+const char* password = "xxxxxxxxxx";
 
