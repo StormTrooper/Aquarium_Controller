@@ -5,7 +5,7 @@
    T5 lights and CO2 controlled via time and switched on/off via relays.
 
    Greg McCarthy
-   07/01/2017
+   14/01/2017
 
    Hardware:
    NodeMCU
@@ -63,12 +63,12 @@ static unsigned long lastSampleTime = 0 - fiveMinutes;// initialize such that a 
 unsigned long int avgValue;                           //Store the average value of the sensor feedback
 
 
-#define ONE_WIRE_BUS D0
+#define ONE_WIRE_BUS    D5
 #define RED             D6                             // pin for red LED
 #define GREEN           D7                             // pin for green - never explicitly referenced
 #define BLUE            D8                             // pin for blue - never explicitly referenced
 #define pH_Reading      A0                             // Analog pin for reading pH value
-#define T5_Lights       D5                             // Pin connected to relay to turn T5 lights on and off
+#define T5_Lights       D0                             // Pin connected to relay to turn T5 lights on and off
 #define CO2             D9
 
 U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* D0 on OLED clock=*/ D4,   /* D1 on OLED data=*/ D3, /* reset=*/ U8X8_PIN_NONE);   // OLEDs without Reset of the Display
@@ -203,14 +203,14 @@ void loop ()
     lastSampleTime += fiveMinutes;
 
     // Get current temperature
+    sensors.requestTemperatures(); // Send the command to get temperatures
     temp = (sensors.getTempCByIndex(0));
-    temp = 22.2;
 
     // Get pH Value from A0
     float pH_Value = GetpH();
 
     const int BUF_MAX = 64;
-    char buf[BUF_MAX]; 
+    char buf[BUF_MAX];
     const int VAL_MAX = 16;
     char val[VAL_MAX];
 
@@ -504,7 +504,7 @@ void ControlLEDs() {
 
   } else if (NTP_Hour < 1 && NTP_Minute < 30) {
 
-    lightsOut();
+  //  lightsOut();
     u8x8.drawString(5, 2, "Lights out");
     u8x8.drawString(0, 3, "CO2:OFF  T5:OFF ");
     digitalWrite(CO2, HIGH);
@@ -596,7 +596,8 @@ float GetpH() {
 
   for (int i = 0; i < 10; i++) //Get 10 sample value from the sensor for smooth the value
   {
-    buf[i] = 1023; //analogRead(pH_Reading);
+    buf[i] = analogRead(pH_Reading);
+  //  Serial.println(pH_Reading);
     delay(10);
   }
   for (int i = 0; i < 9; i++) //sort the analog from small to large
@@ -605,21 +606,22 @@ float GetpH() {
     {
       if (buf[i] > buf[j])
       {
-        temp = buf[i];
+        float temp1 = buf[i];
         buf[i] = buf[j];
-        buf[j] = temp;
+        buf[j] = temp1;
       }
     }
   }
   avgValue = 0;
-  for (int i = 2; i < 8; i++)               //take the average value of 6 center sample
+
+  for (int i = 2; i < 8; i++) {              //take the average value of 6 center sample
     avgValue += buf[i];
-  float phValue = (float)avgValue * 5.0 / 1024 / 6; //convert the analog into millivolt
-  phValue = 73.0 * phValue;                  //convert the millivolt into pH value (1023 = 14pH)
-  Serial.print("    pH:");
-  Serial.print(phValue, 2);
-  Serial.println(" ");
-  digitalWrite(13, HIGH);
-  delay(800);
-  digitalWrite(13, LOW);
+  }
+
+  float phVoltage = (float)avgValue * 3.3 / 1024 / 6; //convert the analog into millivolt. NodeMCU is 3.3V
+  Serial.println(phVoltage);
+  float phValue = 14.0 * phVoltage / 3.148;                  //convert the millivolt into pH value (3.148 = 14pH, from amp data sheet)
+  Serial.println(phValue);
+  return phValue;
 }
+
