@@ -253,13 +253,13 @@ void loop ()
   ControlLEDs();
 
   //Sync time with NTP Server once a day.
-  if ((NTP_Hour = 3) && (NTP_Minute = 3) && (NTPSync = false)) {
+  if ((NTP_Hour == 3) && (NTP_Minute == 3) && (NTPSync == false)) {
     getNTP();
     NTPSync = true;
   }
 
   // Reset NTP Flag 2 mins later
-  if ((NTP_Hour = 3) && (NTP_Minute = 5) && (NTPSync = true)) {
+  if ((NTP_Hour == 3) && (NTP_Minute == 5) && (NTPSync == true)) {
     NTPSync = false;
   }
 
